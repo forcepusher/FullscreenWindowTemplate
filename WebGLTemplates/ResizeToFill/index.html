@@ -41,7 +41,9 @@
       progressBar.style.right = 100 * (1 - progress) + "%";
     }).then(() => {
       progressBar.style.display = "none";
-    });
+    }).catch((message) => {
+	  alert(message);
+	});
   </script>
 </body>
 
