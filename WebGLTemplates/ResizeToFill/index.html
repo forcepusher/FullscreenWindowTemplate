@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+  <title>{{{ PRODUCT_NAME }}}</title>
+</head>
+
+<body style="margin: 0px; overflow: hidden;" oncontextmenu="return false;">
+  <canvas id="unity-canvas"
+    style="width: 100vw; height: 100vh; background: {{{ BACKGROUND_FILENAME ? 'url(\'Build/' + BACKGROUND_FILENAME.replace(/'/g, '%27') + '\') center / cover' : BACKGROUND_COLOR }}}">
+  </canvas>
+
+  <div id="progress-bar" style="position: absolute; left: 0%; right: 100%; top: 49%; bottom: 49%; background-color: white;"></div>
+
+  <script src="Build/{{{ LOADER_FILENAME }}}"></script>
+  <script>
+    const settings = {
+      dataUrl: "Build/{{{ DATA_FILENAME }}}",
+      frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
+      #if USE_WASM
+      codeUrl: "Build/{{{ CODE_FILENAME }}}",
+      #endif
+      #if MEMORY_FILENAME
+      memoryUrl: "Build/{{{ MEMORY_FILENAME }}}",
+      #endif
+      #if SYMBOLS_FILENAME
+      symbolsUrl: "Build/{{{ SYMBOLS_FILENAME }}}",
+      #endif
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "{{{ COMPANY_NAME }}}",
+      productName: "{{{ PRODUCT_NAME }}}",
+      productVersion: "{{{ PRODUCT_VERSION }}}",
+      matchWebGLToCanvasSize: true,
+    };
+
+    const progressBar = document.querySelector("#progress-bar");
+
+    createUnityInstance(document.querySelector("#unity-canvas"), settings, (progress) => {
+      progressBar.style.right = 100 * (1 - progress) + "%";
+    }).then(() => {
+      progressBar.style.display = "none";
+    });
+  </script>
+</body>
+
+</html>
