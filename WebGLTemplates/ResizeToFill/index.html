@@ -12,7 +12,8 @@
     style="width: 100vw; height: 100vh; background: {{{ BACKGROUND_FILENAME ? 'url(\'Build/' + BACKGROUND_FILENAME.replace(/'/g, '%27') + '\') center / cover' : BACKGROUND_COLOR }}}">
   </canvas>
 
-  <div id="progress-bar" style="position: absolute; left: 0%; right: 100%; top: 49%; bottom: 49%; background-color: white;"></div>
+  <div id="progress-bar"
+    style="position: absolute; left: 0%; right: 100%; top: 49%; bottom: 49%; background-color: white;"></div>
 
   <script src="Build/{{{ LOADER_FILENAME }}}"></script>
   <script>
@@ -42,8 +43,8 @@
     }).then(() => {
       progressBar.style.display = "none";
     }).catch((message) => {
-	  alert(message);
-	});
+      alert(message);
+    });
   </script>
 </body>
 
