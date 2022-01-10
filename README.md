@@ -1,4 +1,4 @@
 # ResizeToFillTemplate  
-Unity WebGL template with progress bar that scales to the entire browser/container window. Just 50 lines.  
+Unity WebGL template that scales to the entire browser/container window. Just 50 lines, has a loading progress bar.  
   
 Copy WebGLTemplates into the Assets folder, select it in PlayerSettings and done.
