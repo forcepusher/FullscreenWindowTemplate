@@ -33,7 +33,7 @@
       productName: "{{{ PRODUCT_NAME }}}",
       productVersion: "{{{ PRODUCT_VERSION }}}",
       matchWebGLToCanvasSize: true,
-      devicePixelRatio: 1.5, // Render scale
+      devicePixelRatio: {{{ RENDER_SCALE ? RENDER_SCALE : 1.5 }}},
     };
 
     const progressBar = document.querySelector("#progress-bar");
