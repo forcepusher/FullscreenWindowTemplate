@@ -16,6 +16,8 @@
 
   <script src="Build/{{{ LOADER_FILENAME }}}"></script>
   <script>
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent);
+
     const settings = {
       dataUrl: "Build/{{{ DATA_FILENAME }}}",
       frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
@@ -33,7 +35,7 @@
       productName: "{{{ PRODUCT_NAME }}}",
       productVersion: "{{{ PRODUCT_VERSION }}}",
       matchWebGLToCanvasSize: true,
-      devicePixelRatio: {{{ parseFloat(RENDER_SCALE) ? parseFloat(RENDER_SCALE) : 1.5 }}},
+      devicePixelRatio: !isMobileDevice ? {{{ parseFloat(RENDER_SCALE) ? parseFloat(RENDER_SCALE) : 2.0 }}} : {{{ parseFloat(MOBILE_RENDER_SCALE) ? parseFloat(MOBILE_RENDER_SCALE) : 1.6 }}},
     };
 
     const progressBar = document.querySelector("#progress-bar");
