@@ -49,6 +49,10 @@
         alert(message);
       });
     }, 500); // Wait half a second before loading. Makes page more responsive on reload.
+	
+    document.addEventListener("pointerdown", () => {
+      window.focus();
+    }); // Fix Unity OnApplicationFocus() callback bug in Chrome-based browsers when running game in an iFrame.
   </script>
 </body>
 
