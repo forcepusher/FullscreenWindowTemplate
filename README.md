@@ -1,5 +1,7 @@
 # FullscreenWindowTemplate    
-Unity WebGL template that scales to the entire browser/container window at constant rendering pixel count (think of constant resolution).  
+Unity WebGL template that scales to the entire browser/container window at constant rendering pixel count (think of constant resolution, but not quite that).  
+It's designed to achieve consistent performance while running the game on devices with unbalanced screen-resolution/GPU combination.  
+Besides, it's simple and made for easy modding. Show me what you've got.  
   
 1. Copy WebGLTemplates folder into the Assets folder.  
 2. Go to Edit -> Project Settings -> Player -> WebGL -> Resolution and Presentation -> WebGL Template.  
