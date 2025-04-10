@@ -51,7 +51,7 @@
     createUnityInstance(unityCanvas, settings, (progress) => {
       window.buildLoadingProgress = progress * 100;
       progressBar.style.right = 100 * (1 - progress) + "%";
-    }).then(() => {
+    }).then((unityInstance) => {
       progressBar.style.display = "none";
 
       function adjustResolution() {
