@@ -22,8 +22,12 @@
     const mobilePixelCount = {{{ parseFloat(MOBILE_PIXEL_COUNT) ? parseFloat(MOBILE_PIXEL_COUNT) : 1280*720 }}};
 
     const settings = {
+	  arguments: [],
       dataUrl: "Build/{{{ DATA_FILENAME }}}",
       frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
+	  #if USE_THREADS
+        workerUrl: "Build/{{{ WORKER_FILENAME }}}",
+      #endif
       #if USE_WASM
       codeUrl: "Build/{{{ CODE_FILENAME }}}",
       #endif
@@ -34,9 +38,9 @@
       symbolsUrl: "Build/{{{ SYMBOLS_FILENAME }}}",
       #endif
       streamingAssetsUrl: "StreamingAssets",
-      companyName: "{{{ COMPANY_NAME }}}",
-      productName: "{{{ PRODUCT_NAME }}}",
-      productVersion: "{{{ PRODUCT_VERSION }}}",
+      companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+      productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+      productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
       matchWebGLToCanvasSize: false,
       devicePixelRatio: 1,
     };
