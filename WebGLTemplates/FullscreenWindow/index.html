@@ -28,6 +28,7 @@
       border-radius: 50%;
       position: relative;
       --active: 0;
+      animation: fadeIn 0.5s ease-out;
     }
 
     .dot::before {
@@ -42,17 +43,14 @@
       transition: opacity 0.3s ease-out 0.5s;
     }
 
-    .dot:nth-child(1) {
-      animation-delay: -0.32s;
-    }
-
-    .dot:nth-child(2) {
-      animation-delay: -0.16s;
-    }
-
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.2); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
