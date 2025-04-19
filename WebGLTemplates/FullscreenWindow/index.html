@@ -24,10 +24,22 @@
     .dot {
       width: 12px;
       height: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      position: relative;
+      --active: 0;
+    }
+
+    .dot::before {
+      content: '';
+      position: absolute;
+      inset: 0;
       background: white;
       border-radius: 50%;
-      animation: bounce 1.4s infinite ease-in-out;
-      box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+      opacity: var(--active);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+      animation: pulse 1.5s infinite;
+      transition: opacity 0.3s ease-out;
     }
 
     .dot:nth-child(1) {
@@ -38,24 +50,9 @@
       animation-delay: -0.16s;
     }
 
-    .progress {
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
-    }
-
-    @keyframes bounce {
-      0%, 80%, 100% { 
-        transform: scale(0);
-      }
-      40% { 
-        transform: scale(1);
-      }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
     }
   </style>
 </head>
@@ -70,7 +67,6 @@
       <div class="dot"></div>
       <div class="dot"></div>
       <div class="dot"></div>
-      <div class="progress"></div>
     </div>
   </div>
 
@@ -107,13 +103,14 @@
 
     const unityCanvas = document.querySelector("#unity-canvas");
     const loadingContainer = document.querySelector("#loading-container");
-    const loadingSpinner = document.querySelector("#loading-spinner");
-    const progressText = document.querySelector(".progress");
+    const dots = document.querySelectorAll(".dot");
 
     createUnityInstance(unityCanvas, settings, (progress) => {
       window.buildLoadingProgress = progress;
-      const percentage = Math.round(progress * 100);
-      progressText.textContent = `${percentage}%`;
+      dots.forEach((dot, index) => {
+        const dotProgress = Math.max(0, Math.min(1, (progress * 3) - index));
+        dot.style.setProperty('--active', dotProgress);
+      });
     }).then((unityInstance) => {
       loadingContainer.style.display = "none";
 
