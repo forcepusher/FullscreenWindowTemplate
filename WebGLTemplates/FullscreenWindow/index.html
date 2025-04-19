@@ -5,6 +5,54 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>{{{ PRODUCT_NAME }}}</title>
+  <style>
+    .loading-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .loading-spinner {
+      display: flex;
+      gap: min(1vw, 1vh);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dot {
+      width: min(2vw, 2vh);
+      height: min(2vw, 2vh);
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      position: relative;
+      --active: 0;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out 0.5s forwards;
+    }
+
+    .dot::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: white;
+      border-radius: 50%;
+      opacity: var(--active);
+      box-shadow: 0 0 min(0.5vw, 0.5vh) rgba(255, 255, 255, 0.5);
+      animation: pulse 1.5s infinite;
+      transition: opacity 0.3s ease-out 1.5s;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
 </head>
 
 <body style="margin: 0px; overflow: hidden;" oncontextmenu="return false;">
@@ -12,7 +60,13 @@
     style="position: fixed; width: 100%; height: 100%; background: {{{ BACKGROUND_FILENAME ? 'url(\'Build/' + BACKGROUND_FILENAME.replace(/'/g, '%27') + '\') center / cover' : BACKGROUND_COLOR }}}">
   </canvas>
 
-  <div id="progress-bar" style="position: absolute; left: 0%; right: 100%; top: 49%; bottom: 49%; background-color: white;"></div>
+  <div id="loading-container" class="loading-container">
+    <div id="loading-spinner" class="loading-spinner">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
 
   <script src="Build/{{{ LOADER_FILENAME }}}"></script>
   <script>
@@ -22,11 +76,11 @@
     const mobilePixelCount = {{{ parseFloat(MOBILE_PIXEL_COUNT) ? parseFloat(MOBILE_PIXEL_COUNT) : 1280*720 }}};
 
     const settings = {
-	  arguments: [],
+      arguments: [],
       dataUrl: "Build/{{{ DATA_FILENAME }}}",
       frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
-	  #if USE_THREADS
-        workerUrl: "Build/{{{ WORKER_FILENAME }}}",
+      #if USE_THREADS
+      workerUrl: "Build/{{{ WORKER_FILENAME }}}",
       #endif
       #if USE_WASM
       codeUrl: "Build/{{{ CODE_FILENAME }}}",
@@ -46,13 +100,18 @@
     };
 
     const unityCanvas = document.querySelector("#unity-canvas");
-    const progressBar = document.querySelector("#progress-bar");
+    const loadingContainer = document.querySelector("#loading-container");
+    const dots = document.querySelectorAll(".dot");
 
     createUnityInstance(unityCanvas, settings, (progress) => {
-      window.buildLoadingProgress = progress * 100;
-      progressBar.style.right = 100 * (1 - progress) + "%";
+      window.buildLoadingProgress = progress;
+      const normalizedProgress = Math.min(1, progress / 0.9);
+      dots.forEach((dot, index) => {
+        const dotProgress = Math.max(0, Math.min(1, (normalizedProgress * 3) - index));
+        dot.style.setProperty('--active', dotProgress);
+      });
     }).then((unityInstance) => {
-      progressBar.style.display = "none";
+      loadingContainer.style.display = "none";
 
       function adjustResolution() {
         const targetPixelCount = isMobileDevice ? mobilePixelCount : desktopPixelCount;
