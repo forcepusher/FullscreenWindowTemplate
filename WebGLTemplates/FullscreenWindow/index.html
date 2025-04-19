@@ -16,14 +16,14 @@
 
     .loading-spinner {
       display: flex;
-      gap: 8px;
+      gap: min(1vw, 1vh);
       align-items: center;
       justify-content: center;
     }
 
     .dot {
-      width: 12px;
-      height: 12px;
+      width: min(2vw, 2vh);
+      height: min(2vw, 2vh);
       background: rgba(255, 255, 255, 0.2);
       border-radius: 50%;
       position: relative;
@@ -37,7 +37,7 @@
       background: white;
       border-radius: 50%;
       opacity: var(--active);
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 min(0.5vw, 0.5vh) rgba(255, 255, 255, 0.5);
       animation: pulse 1.5s infinite;
       transition: opacity 0.3s ease-out;
     }
@@ -107,8 +107,10 @@
 
     createUnityInstance(unityCanvas, settings, (progress) => {
       window.buildLoadingProgress = progress;
+
+      const normalizedProgress = Math.min(1, progress / 0.9);
       dots.forEach((dot, index) => {
-        const dotProgress = Math.max(0, Math.min(1, (progress * 3) - index));
+        const dotProgress = Math.max(0, Math.min(1, (normalizedProgress * 3) - index));
         dot.style.setProperty('--active', dotProgress);
       });
     }).then((unityInstance) => {
