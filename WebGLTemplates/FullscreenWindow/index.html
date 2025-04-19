@@ -5,6 +5,54 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>{{{ PRODUCT_NAME }}}</title>
+  <style>
+    .loading-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    .loading-spinner {
+      width: 80px;
+      height: 80px;
+      border: 8px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin: 0 auto 20px;
+    }
+
+    .loading-text {
+      font-size: 24px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .loading-progress {
+      font-size: 18px;
+      opacity: 0.8;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .pulse {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+  </style>
 </head>
 
 <body style="margin: 0px; overflow: hidden;" oncontextmenu="return false;">
@@ -12,7 +60,11 @@
     style="position: fixed; width: 100%; height: 100%; background: {{{ BACKGROUND_FILENAME ? 'url(\'Build/' + BACKGROUND_FILENAME.replace(/'/g, '%27') + '\') center / cover' : BACKGROUND_COLOR }}}">
   </canvas>
 
-  <div id="progress-bar" style="position: absolute; left: 0%; right: 100%; top: 49%; bottom: 49%; background-color: white;"></div>
+  <div id="loading-container" class="loading-container">
+    <div class="loading-spinner"></div>
+    <div class="loading-text pulse">{{{ PRODUCT_NAME }}}</div>
+    <div class="loading-progress">Loading... <span id="loading-percentage">0</span>%</div>
+  </div>
 
   <script src="Build/{{{ LOADER_FILENAME }}}"></script>
   <script>
@@ -22,11 +74,11 @@
     const mobilePixelCount = {{{ parseFloat(MOBILE_PIXEL_COUNT) ? parseFloat(MOBILE_PIXEL_COUNT) : 1280*720 }}};
 
     const settings = {
-	  arguments: [],
+      arguments: [],
       dataUrl: "Build/{{{ DATA_FILENAME }}}",
       frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
-	  #if USE_THREADS
-        workerUrl: "Build/{{{ WORKER_FILENAME }}}",
+      #if USE_THREADS
+      workerUrl: "Build/{{{ WORKER_FILENAME }}}",
       #endif
       #if USE_WASM
       codeUrl: "Build/{{{ CODE_FILENAME }}}",
@@ -46,13 +98,15 @@
     };
 
     const unityCanvas = document.querySelector("#unity-canvas");
-    const progressBar = document.querySelector("#progress-bar");
+    const loadingContainer = document.querySelector("#loading-container");
+    const loadingPercentage = document.querySelector("#loading-percentage");
 
     createUnityInstance(unityCanvas, settings, (progress) => {
-      window.buildLoadingProgress = progress * 100;
-      progressBar.style.right = 100 * (1 - progress) + "%";
+      const percentage = Math.round(progress * 100);
+      loadingPercentage.textContent = percentage;
+      window.buildLoadingProgress = percentage;
     }).then((unityInstance) => {
-      progressBar.style.display = "none";
+      loadingContainer.style.display = "none";
 
       function adjustResolution() {
         const targetPixelCount = isMobileDevice ? mobilePixelCount : desktopPixelCount;
