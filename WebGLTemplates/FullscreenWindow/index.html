@@ -104,13 +104,16 @@
     const dots = document.querySelectorAll(".dot");
 
     createUnityInstance(unityCanvas, settings, (progress) => {
-      window.buildLoadingProgress = progress;
+      window.unityLoadingProgress = progress;
+
       const normalizedProgress = Math.min(1, progress / 0.9);
       dots.forEach((dot, index) => {
         const dotProgress = Math.max(0, Math.min(1, (normalizedProgress * 3) - index));
         dot.style.setProperty('--active', dotProgress);
       });
     }).then((unityInstance) => {
+      window.unityInstance = unityInstance;
+
       loadingContainer.style.display = "none";
 
       function adjustResolution() {
