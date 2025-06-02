@@ -70,7 +70,7 @@
 
   <script src="Build/{{{ LOADER_FILENAME }}}"></script>
   <script>
-    const isMobileDevice = navigator.maxTouchPoints > 0 && !!document.createElement('canvas').getContext('webgl')?.getExtension('WEBGL_compressed_texture_astc');
+    const isMobileDevice = navigator.maxTouchPoints > 0 && !!document.createElement('canvas').getContext('webgl')?.getExtension('WEBGL_compressed_texture_etc2');
 
     const desktopPixelCount = {{{ parseFloat(DESKTOP_PIXEL_COUNT) ? parseFloat(DESKTOP_PIXEL_COUNT) : 2560*1440 }}};
     const mobilePixelCount = {{{ parseFloat(MOBILE_PIXEL_COUNT) ? parseFloat(MOBILE_PIXEL_COUNT) : 1280*720 }}};
